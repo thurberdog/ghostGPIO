@@ -10,6 +10,7 @@ class MainApplication : public QObject
     QProcess i2cset;
     QProcess i2cget;
     void setGPIO(bool pin0, bool pin1);
+    QString getGPIO();
 public:
     explicit MainApplication(QObject *parent = nullptr);
 
