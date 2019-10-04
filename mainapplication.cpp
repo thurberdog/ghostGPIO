@@ -1,12 +1,16 @@
-#include "mainapplication.h"
+﻿#include "mainapplication.h"
 
 MainApplication::MainApplication(QObject *parent) : QObject(parent) {
-  gpioProcess = new  QProcess();
+  gpioProcess = new QProcess();
   connect(gpioProcess, SIGNAL(started()), this, SLOT(startedGPIO()));
-  connect(gpioProcess, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(onFinish(QProcess::ExitStatus)));
-  connect(gpioProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(readGPIO()));
-  connect(gpioProcess,SIGNAL(readyReadStandardError()),this,SLOT(readGPIOerror()));
-connect( gpioProcess, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(stateChanged(QProcess::ProcessState)) );
+  connect(gpioProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this,
+          SLOT(onFinish(QProcess::ExitStatus)));
+  connect(gpioProcess, SIGNAL(readyReadStandardOutput()), this,
+          SLOT(readGPIO()));
+  connect(gpioProcess, SIGNAL(readyReadStandardError()), this,
+          SLOT(readGPIOerror()));
+  connect(gpioProcess, SIGNAL(stateChanged(QProcess::ProcessState)), this,
+          SLOT(stateChanged(QProcess::ProcessState)));
 
   qDebug() << __LINE__ << __FUNCTION__ << "Setting 0,0";
   setGPIO(0, 0);
@@ -26,28 +30,25 @@ connect( gpioProcess, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(s
   qDebug() << __LINE__ << __FUNCTION__ << getGPIO();
 }
 
-void MainApplication::stateChanged(QProcess::ProcessState newstate)
-{
-    qDebug()<<__LINE__<<__FUNCTION__<<newstate;
+void MainApplication::stateChanged(QProcess::ProcessState newstate) {
+  qDebug() << __LINE__ << __FUNCTION__ << newstate;
 }
-void MainApplication::readGPIOerror()
-{
-    gpioErrorResponse = gpioProcess->readAllStandardError();
-    qDebug()<<__LINE__<<__FUNCTION__<<gpioErrorResponse;
+void MainApplication::readGPIOerror() {
+  gpioErrorResponse = gpioProcess->readAllStandardError();
+  qDebug() << __LINE__ << __FUNCTION__ << gpioErrorResponse;
 }
-void MainApplication::readGPIO()
-{
-    gpioResponse = gpioProcess->readAllStandardOutput();
-    qDebug()<<__LINE__<<__FUNCTION__<<gpioResponse;
+void MainApplication::readGPIO() {
+  gpioResponse = gpioProcess->readAllStandardOutput();
+  qDebug() << __LINE__ << __FUNCTION__ << gpioResponse;
 }
-void MainApplication::onFinish(QProcess::ExitStatus exitStatus)
-{
-    qDebug()<<__LINE__<<__FUNCTION__<<"GPIO finished:"<<exitStatus;
+void MainApplication::onFinish(int exitCode, QProcess::ExitStatus exitStatus) {
+  qDebug() << __LINE__ << __FUNCTION__ << "GPIO finished:";
+  qDebug("Exit code: %i", exitCode);
+  qDebug("Exit status: %i", exitStatus);
 }
 
-void MainApplication::startedGPIO()
-{
-    qDebug()<<__LINE__<<__FUNCTION__<<"Started GPIO";
+void MainApplication::startedGPIO() {
+  qDebug() << __LINE__ << __FUNCTION__ << "Started GPIO";
 }
 QString MainApplication::getGPIO() {
   QString pins;
@@ -95,11 +96,12 @@ void MainApplication::setGPIO(bool pin3, bool pin4) {
   gpioProcess->setArguments(arguments);
   while (gpioProcess->state() == QProcess::NotRunning) {
     gpioProcess->start();
+    qDebug() << __LINE__ << __FUNCTION__ << "i2cset started " << pin3 << ","
+             << pin4;
   }
-  qDebug() << __LINE__ << __FUNCTION__ << "i2cset started " << pin3 << ","
-           << pin4;
-  gpioProcess->waitForReadyRead(-1);
-  QString response = gpioProcess->readAllStandardOutput();
-  qDebug() << __LINE__ << __FUNCTION__ << response;
-  gpioProcess->waitForFinished(-1);
+
+//  gpioProcess->waitForReadyRead(-1);
+//  QString response = gpioProcess->readAllStandardOutput();
+//  qDebug() << __LINE__ << __FUNCTION__ << response;
+//  gpioProcess->waitForFinished(-1);
 }
