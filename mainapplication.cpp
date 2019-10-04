@@ -1,21 +1,22 @@
 #include "mainapplication.h"
 
 MainApplication::MainApplication(QObject *parent) : QObject(parent) {
+  gpioProcess = new  QProcess();
   qDebug() << __LINE__ << __FUNCTION__ << "Setting 0,0";
   setGPIO(0, 0);
-  sleep(3);
+  sleep(1);
   qDebug() << __LINE__ << __FUNCTION__ << getGPIO();
   qDebug() << __LINE__ << __FUNCTION__ << "Setting 0,1";
   setGPIO(0, 1);
-  sleep(3);
+  sleep(1);
   qDebug() << __LINE__ << __FUNCTION__ << getGPIO();
   qDebug() << __LINE__ << __FUNCTION__ << "Setting 1,0";
   setGPIO(1, 0);
-  sleep(3);
+  sleep(1);
   qDebug() << __LINE__ << __FUNCTION__ << getGPIO();
   qDebug() << __LINE__ << __FUNCTION__ << "Setting 1,1";
   setGPIO(1, 1);
-  sleep(3);
+  sleep(1);
   qDebug() << __LINE__ << __FUNCTION__ << getGPIO();
 }
 
@@ -61,15 +62,15 @@ void MainApplication::setGPIO(bool pin3, bool pin4) {
   if ((!pin3) && (!pin4)) {
     arguments << "0";
   }
-  i2cset.setProgram(command);
-  i2cset.setArguments(arguments);
-  while (i2cset.state() == QProcess::NotRunning) {
-    i2cset.start();
+  gpioProcess->setProgram(command);
+  gpioProcess->setArguments(arguments);
+  while (gpioProcess->state() == QProcess::NotRunning) {
+    gpioProcess->start();
   }
   qDebug() << __LINE__ << __FUNCTION__ << "i2cset started " << pin3 << ","
            << pin4;
-  i2cset.waitForReadyRead(-1);
-  QString response = i2cset.readAllStandardOutput();
+  gpioProcess->waitForReadyRead(-1);
+  QString response = gpioProcess->readAllStandardOutput();
   qDebug() << __LINE__ << __FUNCTION__ << response;
-  i2cset.waitForFinished(-1);
+  gpioProcess->waitForFinished(-1);
 }
