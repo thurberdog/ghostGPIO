@@ -4,7 +4,7 @@ MainApplication::MainApplication(QObject *parent) : QObject(parent) {
   gpioProcess = new QProcess();
   connect(gpioProcess, SIGNAL(started()), this, SLOT(startedGPIO()));
   connect(gpioProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this,
-          SLOT(onFinish(QProcess::ExitStatus)));
+          SLOT(onFinish(int,QProcess::ExitStatus)));
   connect(gpioProcess, SIGNAL(readyReadStandardOutput()), this,
           SLOT(readGPIO()));
   connect(gpioProcess, SIGNAL(readyReadStandardError()), this,
@@ -14,19 +14,19 @@ MainApplication::MainApplication(QObject *parent) : QObject(parent) {
 
   qDebug() << __LINE__ << __FUNCTION__ << "Setting 0,0";
   setGPIO(0, 0);
-  sleep(1);
+  gpioProcess->waitForFinished(-1);
   qDebug() << __LINE__ << __FUNCTION__ << getGPIO();
   qDebug() << __LINE__ << __FUNCTION__ << "Setting 0,1";
   setGPIO(0, 1);
-  sleep(1);
+   gpioProcess->waitForFinished(-1);
   qDebug() << __LINE__ << __FUNCTION__ << getGPIO();
   qDebug() << __LINE__ << __FUNCTION__ << "Setting 1,0";
   setGPIO(1, 0);
-  sleep(1);
+   gpioProcess->waitForFinished(-1);
   qDebug() << __LINE__ << __FUNCTION__ << getGPIO();
   qDebug() << __LINE__ << __FUNCTION__ << "Setting 1,1";
   setGPIO(1, 1);
-  sleep(1);
+   gpioProcess->waitForFinished(-1);
   qDebug() << __LINE__ << __FUNCTION__ << getGPIO();
 }
 
