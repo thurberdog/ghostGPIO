@@ -1,5 +1,12 @@
 ﻿#include "mainapplication.h"
 
+/**
+ * @brief MainApplication::MainApplication
+ * @author Louis P. Meadows
+ * @date October 4th 2019
+ * @version 1.0.0
+ * @param parent
+ */
 MainApplication::MainApplication(QObject *parent) : QObject(parent) {
   gpioProcess = new QProcess();
   connect(gpioProcess, SIGNAL(started()), this, SLOT(startedGPIO()));
@@ -32,25 +39,31 @@ MainApplication::MainApplication(QObject *parent) : QObject(parent) {
 
 /**
  * @brief MainApplication::stateChanged
+ * @author Louis P. Meadows
  * @param newstate
  */
 void MainApplication::stateChanged(QProcess::ProcessState newstate) {
 
   switch (newstate) {
   case QProcess::NotRunning:
-      qDebug()<<__LINE__<<__FUNCTION__<<"The GPIO process is not running.";
-      break;
+    qDebug() << __LINE__ << __FUNCTION__ << "The GPIO process is not running.";
+    break;
   case QProcess::Starting:
-      qDebug()<<__LINE__<<__FUNCTION__<<"The GPIO process is starting, but the program has not yet been invoked.";
-      break;
+    qDebug() << __LINE__ << __FUNCTION__
+             << "The GPIO process is starting, but the program has not yet "
+                "been invoked.";
+    break;
   case QProcess::Running:
-      qDebug()<<__LINE__<<__FUNCTION__<<"The GPIO process is running and is ready for reading and writing.";
-      break;
+    qDebug()
+        << __LINE__ << __FUNCTION__
+        << "The GPIO process is running and is ready for reading and writing.";
+    break;
   }
 }
 
 /**
  * @brief MainApplication::readGPIOerror
+ * @author Louis P. Meadows
  */
 void MainApplication::readGPIOerror() {
   gpioErrorResponse = gpioProcess->readAllStandardError();
@@ -59,6 +72,7 @@ void MainApplication::readGPIOerror() {
 
 /**
  * @brief MainApplication::readGPIO
+ * @author Louis P. Meadows
  */
 void MainApplication::readGPIO() {
   gpioResponse = gpioProcess->readAllStandardOutput();
@@ -69,6 +83,7 @@ void MainApplication::readGPIO() {
  * @brief MainApplication::onFinish
  * @param exitCode
  * @param exitStatus
+ * @author Louis P. Meadows
  */
 void MainApplication::onFinish(int exitCode, QProcess::ExitStatus exitStatus) {
   qDebug() << __LINE__ << __FUNCTION__ << "GPIO finished:";
@@ -77,17 +92,17 @@ void MainApplication::onFinish(int exitCode, QProcess::ExitStatus exitStatus) {
 
   switch (exitStatus) {
   case QProcess::NormalExit:
-      qDebug() << __LINE__ << __FUNCTION__ <<"The GPIO process exited normally.";
-      break;
+    qDebug() << __LINE__ << __FUNCTION__ << "The GPIO process exited normally.";
+    break;
   case QProcess::CrashExit:
-      qDebug() << __LINE__ << __FUNCTION__ <<"The GPIO process crashed.";
-      break;
-
+    qDebug() << __LINE__ << __FUNCTION__ << "The GPIO process crashed.";
+    break;
   }
 }
 
 /**
  * @brief MainApplication::startedGPIO
+ * @author Louis P. Meadows
  */
 void MainApplication::startedGPIO() {
   qDebug() << __LINE__ << __FUNCTION__ << "Started GPIO process.";
@@ -95,6 +110,7 @@ void MainApplication::startedGPIO() {
 
 /**
  * @brief MainApplication::getGPIO
+ * @author Louis P. Meadows
  * @return
  */
 QString MainApplication::getGPIO() {
@@ -113,6 +129,7 @@ QString MainApplication::getGPIO() {
   gpioProcess->waitForFinished(-1);
   return pins;
 }
+
 /**
  * @brief MainApplication::setGPIO
  * @param pin3
@@ -147,9 +164,5 @@ void MainApplication::setGPIO(bool pin3, bool pin4) {
     qDebug() << __LINE__ << __FUNCTION__ << "i2cset started " << pin3 << ","
              << pin4;
   }
-
-  //  gpioProcess->waitForReadyRead(-1);
-  //  QString response = gpioProcess->readAllStandardOutput();
-  //  qDebug() << __LINE__ << __FUNCTION__ << response;
-    gpioProcess->waitForFinished(-1);
+  gpioProcess->waitForFinished(-1);
 }
