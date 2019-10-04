@@ -30,9 +30,12 @@ MainApplication::MainApplication(QObject *parent) : QObject(parent) {
   qDebug() << __LINE__ << __FUNCTION__ << getGPIO();
 }
 
-
+/**
+ * @brief MainApplication::stateChanged
+ * @param newstate
+ */
 void MainApplication::stateChanged(QProcess::ProcessState newstate) {
-  qDebug() << __LINE__ << __FUNCTION__ << newstate;
+
   switch (newstate) {
   case QProcess::NotRunning:
       qDebug()<<__LINE__<<__FUNCTION__<<"The GPIO process is not running.";
@@ -45,14 +48,28 @@ void MainApplication::stateChanged(QProcess::ProcessState newstate) {
       break;
   }
 }
+
+/**
+ * @brief MainApplication::readGPIOerror
+ */
 void MainApplication::readGPIOerror() {
   gpioErrorResponse = gpioProcess->readAllStandardError();
   qDebug() << __LINE__ << __FUNCTION__ << gpioErrorResponse;
 }
+
+/**
+ * @brief MainApplication::readGPIO
+ */
 void MainApplication::readGPIO() {
   gpioResponse = gpioProcess->readAllStandardOutput();
   qDebug() << __LINE__ << __FUNCTION__ << gpioResponse;
 }
+
+/**
+ * @brief MainApplication::onFinish
+ * @param exitCode
+ * @param exitStatus
+ */
 void MainApplication::onFinish(int exitCode, QProcess::ExitStatus exitStatus) {
   qDebug() << __LINE__ << __FUNCTION__ << "GPIO finished:";
   qDebug("Exit code: %i", exitCode);
@@ -69,22 +86,30 @@ void MainApplication::onFinish(int exitCode, QProcess::ExitStatus exitStatus) {
   }
 }
 
+/**
+ * @brief MainApplication::startedGPIO
+ */
 void MainApplication::startedGPIO() {
-  qDebug() << __LINE__ << __FUNCTION__ << "Started GPIO";
+  qDebug() << __LINE__ << __FUNCTION__ << "Started GPIO process.";
 }
+
+/**
+ * @brief MainApplication::getGPIO
+ * @return
+ */
 QString MainApplication::getGPIO() {
   QString pins;
   QString command = "i2cget";
   QStringList arguments;
-  i2cget.setProgram(command);
   arguments << "-y";
   arguments << "0";
   arguments << "0x3E";
   arguments << "0";
-  i2cget.setArguments(arguments);
-  i2cget.start();
-  i2cget.waitForReadyRead();
-  pins = i2cget.readAllStandardOutput();
+  gpioProcess->setProgram(command);
+  gpioProcess->setArguments(arguments);
+  gpioProcess->start();
+  gpioProcess->waitForReadyRead();
+  pins = gpioProcess->readAllStandardOutput();
   return pins;
 }
 /**
