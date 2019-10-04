@@ -11,9 +11,7 @@ MainApplication::MainApplication(QObject *parent) : QObject(parent) {
           SLOT(readGPIOerror()));
   connect(gpioProcess, SIGNAL(stateChanged(QProcess::ProcessState)), this,
           SLOT(stateChanged(QProcess::ProcessState)));
-  connect(gpioProcess,
-          SIGNAL(QProcess::errorOccurred(QProcess::ProcessError)), this,
-          SLOT(gpioErrorOccurred(QProcess::ProcessError)));
+
   qDebug() << __LINE__ << __FUNCTION__ << "Setting 0,0";
   setGPIO(0, 0);
   gpioProcess->waitForFinished(-1);
@@ -32,11 +30,20 @@ MainApplication::MainApplication(QObject *parent) : QObject(parent) {
   qDebug() << __LINE__ << __FUNCTION__ << getGPIO();
 }
 
-void MainApplication::gpioErrorOccurred(QProcess::ProcessError error) {
-  qDebug() << __LINE__ << __FUNCTION__ << "GPIO error occurred:" << error;
-}
+
 void MainApplication::stateChanged(QProcess::ProcessState newstate) {
   qDebug() << __LINE__ << __FUNCTION__ << newstate;
+  switch (newstate) {
+  case QProcess::NotRunning:
+      qDebug()<<__LINE__<<__FUNCTION__<<"The GPIO process is not running.";
+      break;
+  case QProcess::Starting:
+      qDebug()<<__LINE__<<__FUNCTION__<<"The GPIO process is starting, but the program has not yet been invoked.";
+      break;
+  case QProcess::Running:
+      qDebug()<<__LINE__<<__FUNCTION__<<"The GPIO process is running and is ready for reading and writing.";
+      break;
+  }
 }
 void MainApplication::readGPIOerror() {
   gpioErrorResponse = gpioProcess->readAllStandardError();
@@ -50,6 +57,16 @@ void MainApplication::onFinish(int exitCode, QProcess::ExitStatus exitStatus) {
   qDebug() << __LINE__ << __FUNCTION__ << "GPIO finished:";
   qDebug("Exit code: %i", exitCode);
   qDebug("Exit status: %i", exitStatus);
+
+  switch (exitStatus) {
+  case QProcess::NormalExit:
+      qDebug() << __LINE__ << __FUNCTION__ <<"The GPIO process exited normally.";
+      break;
+  case QProcess::CrashExit:
+      qDebug() << __LINE__ << __FUNCTION__ <<"The GPIO process crashed.";
+      break;
+
+  }
 }
 
 void MainApplication::startedGPIO() {
