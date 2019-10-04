@@ -3,15 +3,19 @@
 MainApplication::MainApplication(QObject *parent) : QObject(parent) {
   qDebug() << __LINE__ << __FUNCTION__ << "Setting 0,0";
   setGPIO(0, 0);
+  sleep(3);
   qDebug() << __LINE__ << __FUNCTION__ << getGPIO();
   qDebug() << __LINE__ << __FUNCTION__ << "Setting 0,1";
   setGPIO(0, 1);
+  sleep(3);
   qDebug() << __LINE__ << __FUNCTION__ << getGPIO();
   qDebug() << __LINE__ << __FUNCTION__ << "Setting 1,0";
   setGPIO(1, 0);
+  sleep(3);
   qDebug() << __LINE__ << __FUNCTION__ << getGPIO();
   qDebug() << __LINE__ << __FUNCTION__ << "Setting 1,1";
   setGPIO(1, 1);
+  sleep(3);
   qDebug() << __LINE__ << __FUNCTION__ << getGPIO();
 }
 

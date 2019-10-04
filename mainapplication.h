@@ -1,6 +1,6 @@
 #ifndef MAINAPPLICATION_H
 #define MAINAPPLICATION_H
-
+#include <unistd.h>
 #include <QObject>
 #include <QDebug>
 #include <QProcess>
