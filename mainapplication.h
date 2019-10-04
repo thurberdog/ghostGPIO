@@ -24,6 +24,7 @@ public slots:
     void readGPIOerror();
     void stateChanged(QProcess::ProcessState newstate);
     void onFinish(int exitCode, QProcess::ExitStatus exitStatus);
+    void gpioErrorOccurred(QProcess::ProcessError error);
 };
 
 #endif // MAINAPPLICATION_H

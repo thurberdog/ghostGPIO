@@ -11,7 +11,9 @@ MainApplication::MainApplication(QObject *parent) : QObject(parent) {
           SLOT(readGPIOerror()));
   connect(gpioProcess, SIGNAL(stateChanged(QProcess::ProcessState)), this,
           SLOT(stateChanged(QProcess::ProcessState)));
-
+  connect(gpioProcess,
+          SIGNAL(QProcess::errorOccurred(QProcess::ProcessError)), this,
+          SLOT(gpioErrorOccurred(QProcess::ProcessError)));
   qDebug() << __LINE__ << __FUNCTION__ << "Setting 0,0";
   setGPIO(0, 0);
   gpioProcess->waitForFinished(-1);
@@ -30,6 +32,9 @@ MainApplication::MainApplication(QObject *parent) : QObject(parent) {
   qDebug() << __LINE__ << __FUNCTION__ << getGPIO();
 }
 
+void MainApplication::gpioErrorOccurred(QProcess::ProcessError error) {
+  qDebug() << __LINE__ << __FUNCTION__ << "GPIO error occurred:" << error;
+}
 void MainApplication::stateChanged(QProcess::ProcessState newstate) {
   qDebug() << __LINE__ << __FUNCTION__ << newstate;
 }
