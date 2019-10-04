@@ -20,10 +20,10 @@ signals:
 
 public slots:
     void startedGPIO();
-    void onFinish(int exitStatus);
     void readGPIO();
     void readGPIOerror();
     void stateChanged(QProcess::ProcessState newstate);
+    void onFinish(QProcess::ExitStatus exitStatus);
 };
 
 #endif // MAINAPPLICATION_H

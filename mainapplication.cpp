@@ -3,7 +3,7 @@
 MainApplication::MainApplication(QObject *parent) : QObject(parent) {
   gpioProcess = new  QProcess();
   connect(gpioProcess, SIGNAL(started()), this, SLOT(startedGPIO()));
-  connect(gpioProcess, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(onFinish(int,QProcess::ExitStatus)));
+  connect(gpioProcess, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(onFinish(QProcess::ExitStatus)));
   connect(gpioProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(readGPIO()));
   connect(gpioProcess,SIGNAL(readyReadStandardError()),this,SLOT(readGPIOerror()));
 connect( gpioProcess, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(stateChanged(QProcess::ProcessState)) );
@@ -40,7 +40,7 @@ void MainApplication::readGPIO()
     gpioResponse = gpioProcess->readAllStandardOutput();
     qDebug()<<__LINE__<<__FUNCTION__<<gpioResponse;
 }
-void MainApplication::onFinish(int exitStatus)
+void MainApplication::onFinish(QProcess::ExitStatus exitStatus)
 {
     qDebug()<<__LINE__<<__FUNCTION__<<"GPIO finished:"<<exitStatus;
 }
