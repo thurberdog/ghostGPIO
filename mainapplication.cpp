@@ -110,6 +110,7 @@ QString MainApplication::getGPIO() {
   gpioProcess->start();
   gpioProcess->waitForReadyRead();
   pins = gpioProcess->readAllStandardOutput();
+  gpioProcess->waitForFinished(-1);
   return pins;
 }
 /**
@@ -150,5 +151,5 @@ void MainApplication::setGPIO(bool pin3, bool pin4) {
   //  gpioProcess->waitForReadyRead(-1);
   //  QString response = gpioProcess->readAllStandardOutput();
   //  qDebug() << __LINE__ << __FUNCTION__ << response;
-  //  gpioProcess->waitForFinished(-1);
+    gpioProcess->waitForFinished(-1);
 }
