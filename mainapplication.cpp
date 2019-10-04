@@ -40,7 +40,11 @@ void MainApplication::setGPIO(bool pin3, bool pin4) {
   // pin 2 & 3 output to the controller
   QString command = "i2cset";
   QStringList arguments;
-  arguments << "-y 0 0x3E 1 ";
+  arguments << "-y -r 0 0x3E 1 ";
+  arguments << "-r";
+  arguments << "0";
+  arguments << "0x3E";
+  arguments << "1";
   if ((pin3) && (pin4)) {
     arguments << "12";
   }
@@ -60,5 +64,8 @@ void MainApplication::setGPIO(bool pin3, bool pin4) {
   }
   qDebug() << __LINE__ << __FUNCTION__ << "i2cset started " << pin3 << ","
            << pin4;
+  i2cset.waitForReadyRead(-1);
+  QString response = i2cset.readAllStandardOutput();
+  qDebug() << __LINE__ << __FUNCTION__ << response;
   i2cset.waitForFinished(-1);
 }
