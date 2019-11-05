@@ -18,7 +18,7 @@ public:
       "i2cget -y 0 0x3E 1"; // read J22 pin 3 -- GP1 for FS line
   int milliseconds = 1000;  // 1 second
   void configureGPIO();
-  QString getGPIO();
+  void getGPIO();
 signals:
 
 public slots:

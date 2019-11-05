@@ -54,42 +54,25 @@ void GPIO::configureGPIO() {
 void GPIO::setGPIO(bool pin3, bool pin4) {
   // pin 0 & 1 input from the controller
   // pin 2 & 3 output to the controller
-  QString command = "i2cset";
-  QStringList arguments;
-  arguments << "-y -r 0 0x3E 1 ";
-  arguments << "-r";
-  arguments << "0";
-  arguments << "0x3E";
-  arguments << "1";
+
   if ((pin3) && (pin4)) {
-    arguments << "12";
+    gpioProcess->start("i2cset -y 0 0x3E 1 12");
   }
   if ((!pin3) && (pin4)) {
-    arguments << "8";
+    gpioProcess->start("i2cset -y 0 0x3E 1 8");
   }
   if ((pin3) && (!pin4)) {
-    arguments << "4";
+    gpioProcess->start("i2cset -y 0 0x3E 1 4");
   }
   if ((!pin3) && (!pin4)) {
-    arguments << "0";
+    gpioProcess->start("i2cset -y 0 0x3E 1 0");
   }
-  gpioProcess->setProgram(command);
-  gpioProcess->setArguments(arguments);
-  while (gpioProcess->state() == QProcess::NotRunning) {
-    gpioProcess->start();
-    qDebug() << __LINE__ << __FUNCTION__ << "i2cset started " << pin3 << ","
-             << pin4;
-  }
-  gpioProcess->waitForFinished(-1);
+
+  qDebug() << __LINE__ << __FUNCTION__ << "i2cset started " << pin3 << ","
+           << pin4;
 }
 
-QString GPIO::getGPIO() {
-  QString pins;
-  gpioProcess->start("i2cget -y 0 0x3E 1");
-  pins = gpioProcess->readAllStandardOutput();
-  qDebug() << __LINE__ << __FUNCTION__ << "GPIO:" << pins;
-  return pins;
-}
+void GPIO::getGPIO() { gpioProcess->start("i2cget -y 0 0x3E 1"); }
 
 void GPIO::stateChanged(QProcess::ProcessState newstate) {
 

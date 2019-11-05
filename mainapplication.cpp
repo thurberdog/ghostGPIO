@@ -13,39 +13,30 @@ MainApplication::MainApplication(QObject *parent) : QObject(parent) {
   timer->start(milliseconds);
   gpio = new GPIO(this);
   gpio->configureGPIO();
-
 }
 
-void MainApplication::update()
-{   switch (leds) {
-    case 0:
-        qDebug() << __LINE__ << __FUNCTION__ << "Setting 0,0";
-        gpio->setGPIO(0, 0);
-        qDebug() << __LINE__ << __FUNCTION__ << "GPIO:" << gpio->getGPIO();
-        break;
-    case 1:
-        qDebug() << __LINE__ << __FUNCTION__ << "Setting 0,1";
-        gpio->setGPIO(0, 1);
-        qDebug() << __LINE__ << __FUNCTION__ << "GPIO:" << gpio->getGPIO();
-        break;
-    case 2:
-        qDebug() << __LINE__ << __FUNCTION__ << "Setting 1,0";
-        gpio->setGPIO(1, 0);
-        qDebug() << __LINE__ << __FUNCTION__ <<  "GPIO:" << gpio->getGPIO();
-        break;
-    case 3:
-        qDebug() << __LINE__ << __FUNCTION__ << "Setting 1,1";
-        gpio->setGPIO(1, 1);
-        qDebug() << __LINE__ << __FUNCTION__ <<  "GPIO:" << gpio->getGPIO();
-        break;
-    default:
-        leds = -1;
-    }
-    leds++;
-
-
+void MainApplication::update() {
+  gpio->getGPIO();
+  switch (leds) {
+  case 0:
+    qDebug() << __LINE__ << __FUNCTION__ << "Setting 0,0";
+    gpio->setGPIO(0, 0);
+    break;
+  case 1:
+    qDebug() << __LINE__ << __FUNCTION__ << "Setting 0,1";
+    gpio->setGPIO(0, 1);
+    break;
+  case 2:
+    qDebug() << __LINE__ << __FUNCTION__ << "Setting 1,0";
+    gpio->setGPIO(1, 0);
+    break;
+  case 3:
+    qDebug() << __LINE__ << __FUNCTION__ << "Setting 1,1";
+    gpio->setGPIO(1, 1);
+    break;
+  default:
+    leds = -1;
+  }
+  leds++;
+  gpio->getGPIO();
 }
-
-
-
-
