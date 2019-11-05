@@ -85,20 +85,12 @@ void GPIO::setGPIO(bool pin3, bool pin4) {
 
 QString GPIO::getGPIO() {
   QString pins;
-  QString command = "i2cget";
-  QStringList arguments;
-  arguments << "-y";
-  arguments << "0";
-  arguments << "0x3E";
-  arguments << "0";
-  gpioProcess->setProgram(command);
-  gpioProcess->setArguments(arguments);
-  gpioProcess->start();
-  gpioProcess->waitForReadyRead();
+  gpioProcess->start("i2cget -y 0 0x3E 1");
   pins = gpioProcess->readAllStandardOutput();
   qDebug() << __LINE__ << __FUNCTION__ << "GPIO:" << pins;
   return pins;
 }
+
 void GPIO::stateChanged(QProcess::ProcessState newstate) {
 
   switch (newstate) {
