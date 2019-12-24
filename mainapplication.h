@@ -1,25 +1,31 @@
 #ifndef MAINAPPLICATION_H
 #define MAINAPPLICATION_H
-#include "gpio.hpp"
-#include <QDebug>
-#include <QObject>
-#include <QProcess>
-#include <QTimer>
-#include <stdlib.h> //for using the function sleep
 #include <unistd.h>
-class MainApplication : public QObject {
-  Q_OBJECT
-
-  GPIO *gpio;
-  int milliseconds = 1000; // 1 second
+#include <QObject>
+#include <QDebug>
+#include <QProcess>
+#include "gpio.hpp"
+class MainApplication : public QObject
+{
+        Q_OBJECT
+        GPIO* gpio;
+        QProcess* gpioProcess;
+        void setGPIO(bool pin0, bool pin1);
+        QString getGPIO();
+        QString gpioResponse;
+        QString gpioErrorResponse;
 public:
-  explicit MainApplication(QObject *parent = nullptr);
-  QTimer *timer;
-  int leds = 0;
+        explicit MainApplication(QObject* parent = nullptr);
+
 signals:
 
 public slots:
-  void update();
+        void startedGPIO();
+        void readGPIO();
+        void readGPIOerror();
+        void stateChanged(QProcess::ProcessState newstate);
+        void onFinish(int exitCode, QProcess::ExitStatus exitStatus);
+
 };
 
 #endif // MAINAPPLICATION_H
