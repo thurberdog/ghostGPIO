@@ -49,7 +49,6 @@ public:
         // 0x00 and 0xFF.
         uint gpio = 0x3e;
         int fd;
-        QString getGPIO();
         QString gpioResponse;
         QString gpioInput;
         QString gpioOutput;
@@ -62,18 +61,7 @@ public:
         QTimer* timerLED;
         int milliseconds = 1000; // 1 second
         int laserFireCount = 0;
-        void configureGPIO();
-        void clear();
-        QString readInput();
-        bool fireLaser();
-        void print_flags(unsigned long flags);
-        int list_device(const char* device_name);
-        void print_usage();
-        void exportPins();
-        void setDirection();
-        void togglePin();
-        void unexport();
-        void listDevices();
+
 signals:
 
 public slots:

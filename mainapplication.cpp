@@ -10,8 +10,7 @@
 MainApplication::MainApplication(QObject* parent) : QObject(parent)
 {
         gpio = new GPIO();
-        gpio->configureGPIO();
-        gpio->setGPIO(1, 1);
+
         gpioProcess = new QProcess();
         connect(gpioProcess, SIGNAL(started()), this, SLOT(startedGPIO()));
         connect(gpioProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this,
