@@ -209,10 +209,10 @@ void GPIO::stateChanged(QProcess::ProcessState newstate)
 void GPIO::readGPIOerror()
 {
         gpioErrorResponse = gpioProcess->readAllStandardError();
-        if (trace)
-        {
-                qDebug() << __LINE__ << __FUNCTION__ << "Error:" << gpioErrorResponse;
-        }
+
+
+        qDebug() << __LINE__ << __FUNCTION__ << "Error:" << gpioErrorResponse;
+
 }
 
 /**
@@ -224,14 +224,9 @@ void GPIO::readGPIOerror()
 void GPIO::readGPIO()
 {
         gpioResponse = gpioProcess->readAllStandardOutput();
-        if (gpioResponse.contains("0x"))
-        {
-                fireSwitch = gpioResponse;
-        }
-        if (trace)
-        {
-                qDebug() << __LINE__ << __FUNCTION__ << gpioResponse;
-        }
+
+        qDebug() << __LINE__ << __FUNCTION__ << gpioResponse;
+
 }
 
 /**
@@ -247,15 +242,14 @@ void GPIO::onFinish(int exitCode, QProcess::ExitStatus exitStatus)
         switch (exitStatus)
         {
         case QProcess::NormalExit:
-                //    qDebug() << __LINE__ << __FUNCTION__ << "The GPIO process exited
-                //    normally.";
+                qDebug() << __LINE__ << __FUNCTION__ << "The GPIO process exited normally.";
                 break;
         case QProcess::CrashExit:
-                //    qDebug() << __LINE__ << __FUNCTION__ << "The GPIO process crashed.";
+                qDebug() << __LINE__ << __FUNCTION__ << "The GPIO process crashed.";
                 break;
         }
         qDebug() << __LINE__ << __FUNCTION__ << "Exit code:" << exitCode;
-        //  qDebug() << __LINE__ << __FUNCTION__ << "Exit status:" << exitStatus;
+        qDebug() << __LINE__ << __FUNCTION__ << "Exit status:" << exitStatus;
 }
 
 /**
@@ -277,7 +271,7 @@ void GPIO::turnOffLED()
  */
 void GPIO::startedGPIO()
 {
-        //  qDebug() << __LINE__ << __FUNCTION__ << "Started GPIO process.";
+        qDebug() << __LINE__ << __FUNCTION__ << "Started GPIO process.";
 }
 
 /**
@@ -310,28 +304,26 @@ QString GPIO::getGPIO()
         gpioProcess->waitForReadyRead(-1);
         gpioInput = gpioProcess->readAllStandardOutput();
         gpioProcess->waitForFinished(milliseconds);
-        if (trace)
-        {
-                qDebug() << __LINE__ << __FUNCTION__ << read_gpio_input;
-                qDebug() << __LINE__ << __FUNCTION__ << gpioInput;
-        }
+
+
+        qDebug() << __LINE__ << __FUNCTION__ << read_gpio_input;
+        qDebug() << __LINE__ << __FUNCTION__ << gpioInput;
+
         gpioProcess->start(read_gpio_output);
         gpioProcess->waitForReadyRead(-1);
         gpioOutput = gpioProcess->readAllStandardOutput();
-        if (trace)
-        {
-                qDebug() << __LINE__ << __FUNCTION__ << read_gpio_output;
-                qDebug() << __LINE__ << __FUNCTION__ << gpioOutput;
-        }
+
+        qDebug() << __LINE__ << __FUNCTION__ << read_gpio_output;
+        qDebug() << __LINE__ << __FUNCTION__ << gpioOutput;
+
         gpioProcess->waitForFinished(milliseconds);
         if ((gpioInput.contains("0x02")) || (gpioInput.contains("0x0f")) ||
                         (gpioInput.contains("0x07")) || (gpioInput.contains("0x0a")))
         {
                 fireSwitch = gpioInput;
-                if (trace)
-                {
-                        qDebug() << __LINE__ << __FUNCTION__ << "FIRE SWITCH PRESSED";
-                }
+
+                qDebug() << __LINE__ << __FUNCTION__ << "FIRE SWITCH PRESSED";
+
         }
         else
         {
