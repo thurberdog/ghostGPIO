@@ -32,7 +32,6 @@ GPIO::GPIO(QObject* parent) : QObject(parent)
                         SLOT(readGPIOerror()));
         connect(gpioProcess, SIGNAL(stateChanged(QProcess::ProcessState)), this,
                         SLOT(stateChanged(QProcess::ProcessState)));
-
 }
 
 
